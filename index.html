@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Self-Serve Connect Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a concept brief with a sticky tab rail; each tab is a working mock of one surface, phone-width mocks sit beside the reasoning. */
+:root {
+  --bg: #F3F5F2;
+  --surface: #FFFFFF;
+  --ink: #12201C;
+  --muted: #55625D;
+  --line: #D6DDD9;
+  --accent: #0D6B5B;
+  --accent-soft: #DCEFE9;
+  --good: #1B7F46;
+  --good-soft: #DDF2E5;
+  --warn: #9A5B00;
+  --warn-soft: #FBEBD2;
+  --risk: #B0281D;
+  --risk-soft: #F9DEDB;
+  --shadow: 0 1px 2px rgba(18,32,28,.06), 0 8px 24px rgba(18,32,28,.06);
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1513; --surface: #16201D; --ink: #E7EEEB; --muted: #9DABA6; --line: #2A3733;
+    --accent: #5CC7AE; --accent-soft: #173A33; --good: #5BC98A; --good-soft: #163626;
+    --warn: #E5A84A; --warn-soft: #3A2A12; --risk: #F07A6F; --risk-soft: #3D1A17;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1513; --surface: #16201D; --ink: #E7EEEB; --muted: #9DABA6; --line: #2A3733;
+  --accent: #5CC7AE; --accent-soft: #173A33; --good: #5BC98A; --good-soft: #163626;
+  --warn: #E5A84A; --warn-soft: #3A2A12; --risk: #F07A6F; --risk-soft: #3D1A17;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1120px; margin-inline: auto; padding-block: 20px 56px; display: flex; flex-direction: column; gap: 28px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.05; font-weight: 800; }
+h2 { font-size: 26px; line-height: 1.15; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 13px; }
+.label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+a { color: var(--accent); }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.disclaimer { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; border: 1px dashed var(--line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--muted); background: var(--surface); }
+.disclaimer b { color: var(--ink); }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.hero .lede { font-size: 17px; max-width: 60ch; margin-top: 14px; }
+.byline { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13.5px; color: var(--muted); }
+.frictions { display: flex; flex-direction: column; gap: 10px; }
+.friction { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: 26px minmax(0,1fr); gap: 10px; }
+.friction .n { font-family: var(--mono); font-size: 12px; color: var(--accent); padding-top: 2px; }
+.friction p { font-size: 14px; }
+.friction .src { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; }
+.tab { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 7px 14px; font-size: 14px; font-weight: 500; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.view { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 32px; align-items: start; }
+.why { display: flex; flex-direction: column; gap: 14px; }
+.why ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* stepper */
+.steps { display: flex; gap: 6px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); }
+.step .dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; }
+.step.done { color: var(--good); }
+.step.done .dot { background: var(--good); border-color: var(--good); color: var(--surface); }
+.step.on { color: var(--ink); border-color: var(--ink); }
+.step.on .dot { border-color: var(--ink); }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 13px; font-weight: 600; }
+.field input, .field select { font: inherit; font-size: 14px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); width: 100%; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 9px; padding: 9px 16px; font-weight: 600; font-size: 14px; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+.check input, .field .check input { margin-top: 4px; accent-color: var(--accent); width: auto; flex: none; padding: 0; }
+.field .check { font-weight: 400; font-size: 14px; }
+.keybox { font-family: var(--mono); font-size: 13px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; overflow-x: auto; }
+.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 18px minmax(0,1fr) auto; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+.timeline li:last-child { border-bottom: 0; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: var(--line); }
+.tl-dot.done { background: var(--good); }
+.tl-dot.now { background: var(--warn); box-shadow: 0 0 0 4px var(--warn-soft); }
+.tl-when { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* chips */
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+.p-read { background: var(--accent-soft); color: var(--accent); }
+.p-trade { background: var(--risk-soft); color: var(--risk); }
+.p-write { background: var(--warn-soft); color: var(--warn); }
+.p-data { background: var(--bg); color: var(--ink); border-color: var(--line); }
+.p-good { background: var(--good-soft); color: var(--good); }
+.p-plain { background: var(--bg); color: var(--muted); border-color: var(--line); }
+
+/* marketplace */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 5px 11px; font-size: 13px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+.toggle input { accent-color: var(--accent); }
+.apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.app { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); }
+.app-top { display: flex; gap: 10px; align-items: center; }
+.mark { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; font-family: var(--display); font-weight: 800; color: var(--surface); flex: none; }
+.app h3 { font-size: 15px; }
+.app .cat { font-size: 12px; color: var(--muted); }
+.app p { font-size: 13.5px; color: var(--muted); }
+.app .pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.app .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; flex-wrap: wrap; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 24px; color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; }
+
+/* consent phone */
+.phone { width: min(100%, 380px); margin-inline: auto; border: 1px solid var(--line); border-radius: 26px; padding: 18px; background: var(--bg); display: flex; flex-direction: column; gap: 14px; }
+.consent-head { display: flex; gap: 12px; align-items: center; }
+.verified { font-size: 12px; color: var(--good); font-weight: 600; }
+.perm { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 4px 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+.perm .what { font-size: 14px; font-weight: 600; }
+.perm .detail { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+.perm .scope { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.envs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.env { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--surface); color: var(--ink); text-align: left; display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+.env b { font-size: 14px; }
+.env[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.notice { font-size: 12.5px; padding: 8px 10px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); }
+.success { font-size: 14px; padding: 12px; border-radius: 10px; background: var(--good-soft); color: var(--good); }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13.5px; }
+.compare > div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+
+/* connected apps */
+.conn { display: flex; flex-direction: column; gap: 10px; }
+.conn-row { display: grid; grid-template-columns: 36px minmax(0,1fr) auto; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); }
+.conn-row .meta { font-size: 12.5px; color: var(--muted); }
+.stream { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--accent); font-weight: 600; }
+.stream::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.confirm { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; background: var(--risk-soft); color: var(--risk); padding: 8px 10px; border-radius: 8px; }
+
+/* metrics */
+.metrics-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 440px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+td.num { font-variant-numeric: tabular-nums; }
+.north { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: 12px; background: var(--ink); color: var(--bg); }
+.north .label { color: var(--bg); opacity: .7; }
+.north b { font-family: var(--display); font-size: 22px; }
+.phases { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.phase { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
+.phase .label { color: var(--accent); }
+
+footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .hero, .view { grid-template-columns: minmax(0, 1fr); }
+  .phases { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px) {
+  .apps, .compare, .phases { grid-template-columns: minmax(0, 1fr); }
+  .stage { padding: 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .view { animation: rise .25s ease-out; }
+  @keyframes rise { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<div class="wrap">
+  <div class="disclaimer" role="note">
+    <b>Unofficial product concept</b>
+    <span>by Ketan Pansare. Not affiliated with or endorsed by Alpaca. Built from Alpaca’s public documentation; every app, account and number on this page is fictional.</span>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="label">Concept · Alpaca Connect &amp; Trading API</div>
+      <h1>Partners ship in a day. Traders say yes with confidence.</h1>
+      <p class="lede">Connect grows when two things are easy: a developer getting from idea to a working paper-trading integration, and a trader understanding exactly what they are authorizing. This concept tightens both ends of that funnel without loosening compliance review.</p>
+      <div class="byline">
+        <span>Ketan Pansare, Senior Product Manager</span>
+        <span>linkedin.com/in/ketanpansare</span>
+      </div>
+    </div>
+    <div class="frictions" aria-label="Frictions observed in public docs">
+      <div class="label">What I saw in the public docs</div>
+      <div class="friction"><span class="n">A</span><div><p>App registration ends with the team following up by email “to complete the remaining process.” Partners see no status or timeline.</p><p class="src">Docs: Registering Your App</p></div></div>
+      <div class="friction"><span class="n">B</span><div><p>The marketplace lists apps by name and description under one “All” filter. Cards don’t show what access an app asks for or whether it works in paper.</p><p class="src">alpaca.markets/connect</p></div></div>
+      <div class="friction"><span class="n">C</span><div><p>Scopes are technical (<span class="mono">account:write</span>, <span class="mono">trading</span>, <span class="mono">data</span>). Without <span class="mono">env</span>, users are asked to authorize live and paper together.</p><p class="src">Docs: Using OAuth2 and Trading API</p></div></div>
+      <div class="friction"><span class="n">D</span><div><p>Most users get one market data stream. A second app gets error 406, “connection limit exceeded,” and the trader never learns why.</p><p class="src">Docs: Using OAuth2 and Trading API</p></div></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Concept surfaces">
+    <button class="tab" role="tab" id="t-onboard" data-view="onboard" aria-selected="true">1 · Partner onboarding</button>
+    <button class="tab" role="tab" id="t-market" data-view="market" aria-selected="false">2 · Marketplace</button>
+    <button class="tab" role="tab" id="t-consent" data-view="consent" aria-selected="false">3 · Consent</button>
+    <button class="tab" role="tab" id="t-connected" data-view="connected" aria-selected="false">4 · Connected apps</button>
+    <button class="tab" role="tab" id="t-metrics" data-view="metrics" aria-selected="false">5 · Metrics &amp; rollout</button>
+  </nav>
+
+  <!-- 1. Partner onboarding -->
+  <section class="view" id="v-onboard" role="tabpanel" aria-labelledby="t-onboard">
+    <div class="why">
+      <h2>Self-serve partner onboarding</h2>
+      <p>Today registration hands a partner credentials, then waits on email. The concept gives every partner an <b>instant paper sandbox</b> and a <b>visible review tracker</b>, so building starts on day one and live access waits only on compliance.</p>
+      <ul>
+        <li>Paper access is automatic. Partners can run the full OAuth flow against paper before anyone reviews them.</li>
+        <li>Live access stays gated by Alpaca Compliance, as the docs require. The tracker shows the stage, the owner and a target date.</li>
+        <li>Monetization disclosure is a checklist item up front, not a surprise at review.</li>
+      </ul>
+      <p class="callout muted">Fixes friction A. Moves the metric that matters most to partners: days from sign-up to first paper trade.</p>
+    </div>
+    <div class="stage" aria-live="polite">
+      <div class="steps" id="steps"></div>
+      <div id="stepBody"></div>
+      <div class="row" style="justify-content: space-between;">
+        <button class="btn ghost" id="stepBack">Back</button>
+        <button class="btn" id="stepNext">Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Marketplace -->
+  <section class="view" id="v-market" role="tabpanel" aria-labelledby="t-market" hidden>
+    <div class="why">
+      <h2>Discovery that answers “is this safe to try?”</h2>
+      <p>A trader choosing an app wants to know three things before connecting: what it does, what it can touch, and whether they can try it with paper money first. Each card now answers all three.</p>
+      <ul>
+        <li>Categories that match how traders shop: charting, automation, analytics, values-based investing.</li>
+        <li>Permission pills on every card, colored by risk. Read-only reads calm; order placement reads serious.</li>
+        <li>“Works with paper” filter and a <b>Try in paper</b> button that opens the paper-only consent screen.</li>
+      </ul>
+      <p class="callout muted">Fixes friction B. Apps and descriptions here are fictional samples.</p>
+    </div>
+    <div class="stage">
+      <div class="filters" id="cats" aria-label="Categories"></div>
+      <div class="row">
+        <label class="toggle" for="fPaper"><input type="checkbox" id="fPaper"> Works with paper</label>
+        <label class="toggle" for="fRead"><input type="checkbox" id="fRead"> Read-only apps</label>
+      </div>
+      <div class="apps" id="apps"></div>
+    </div>
+  </section>
+
+  <!-- 3. Consent -->
+  <section class="view" id="v-consent" role="tabpanel" aria-labelledby="t-consent" hidden>
+    <div class="why">
+      <h2>Consent in the trader’s words</h2>
+      <p>The OAuth scopes stay exactly as they are under the hood. What changes is what the trader reads: each scope becomes a plain sentence with a risk level, and the screen opens on <b>paper</b> unless the app is approved for live.</p>
+      <div class="compare">
+        <div><span class="label">Scope</span><span class="mono">trading</span><span class="mono">account:write</span><span class="mono">data</span></div>
+        <div><span class="label">What the trader reads</span><span>Place, change and cancel orders</span><span>Edit account settings and watchlists</span><span>Use your market data stream</span></div>
+      </div>
+      <ul>
+        <li>Paper first: a new connection starts on paper and graduates to live with one tap later.</li>
+        <li>The data stream warning appears before approval, not as error 406 after.</li>
+        <li>Revoke anytime, with a link to Connected apps.</li>
+      </ul>
+      <p class="callout muted">Fixes friction C. This is a design mock with no sign-in or real authorization.</p>
+    </div>
+    <div class="stage">
+      <div class="phone" id="phone"></div>
+    </div>
+  </section>
+
+  <!-- 4. Connected apps -->
+  <section class="view" id="v-connected" role="tabpanel" aria-labelledby="t-connected" hidden>
+    <div class="why">
+      <h2>One place to see and control every connection</h2>
+      <p>Traders can see which apps hold which access, on which account, and which one owns their single market data stream. Switching the stream is one tap, so the 406 error stops being a support ticket.</p>
+      <ul>
+        <li>Account type, permissions and last activity on every row.</li>
+        <li>“Use stream here” moves the data stream between apps on purpose.</li>
+        <li>Revoke asks once, in place, then removes access.</li>
+      </ul>
+      <p class="callout muted">Fixes friction D. Connections listed are fictional.</p>
+    </div>
+    <div class="stage">
+      <div class="conn" id="conn"></div>
+    </div>
+  </section>
+
+  <!-- 5. Metrics -->
+  <section class="view" id="v-metrics" role="tabpanel" aria-labelledby="t-metrics" hidden>
+    <div class="why">
+      <h2>How I’d measure it, and ship it</h2>
+      <p>Every change above serves one outcome: more trading volume that flows through Connect apps. I would baseline each input metric in week one before setting targets, since I don’t have Alpaca’s data.</p>
+      <div class="north">
+        <span class="label">North star</span>
+        <b>Trading volume placed through Connect apps</b>
+        <span>Weekly, split by paper and live, and by app category.</span>
+      </div>
+      <p class="callout muted">Compliance review stays human. Nothing here removes a gate; it only makes the gate visible and moves work before it.</p>
+    </div>
+    <div class="stage">
+      <div class="metrics-wrap">
+        <table>
+          <thead><tr><th>Input metric</th><th>Definition</th><th>Direction</th></tr></thead>
+          <tbody>
+            <tr><td>Time to first paper trade</td><td>Days from app registration to the first paper order placed through OAuth</td><td>Down</td></tr>
+            <tr><td>Review cycle time</td><td>Days from live submission to a compliance decision</td><td>Down</td></tr>
+            <tr><td>Consent completion</td><td>Approved authorizations ÷ consent screens shown</td><td>Up</td></tr>
+            <tr><td>Paper to live graduation</td><td>Connections that move to live within 30 days</td><td>Up</td></tr>
+            <tr><td>Active connected apps</td><td>Connections with an API call in the last 30 days</td><td>Up</td></tr>
+            <tr><td>Data stream tickets</td><td>Support tickets mentioning error 406</td><td>Down</td></tr>
+            <tr><td>Revocations in first week</td><td>Guardrail: connections revoked within 7 days</td><td>Flat or down</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="phases">
+        <div class="phase"><span class="label">Phase 1</span><b>Review tracker</b><span>Status, owner and target date on submitted apps. Lowest engineering cost, fastest relief.</span></div>
+        <div class="phase"><span class="label">Phase 2</span><b>Plain-language consent</b><span>Copy and layout over existing scopes, with paper first. A/B test on completion.</span></div>
+        <div class="phase"><span class="label">Phase 3</span><b>Marketplace filters</b><span>Categories, permission pills and Try in paper.</span></div>
+        <div class="phase"><span class="label">Phase 4</span><b>Connected apps</b><span>Stream switching and in-place revoke.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Concept by Ketan Pansare · pansareketan79@gmail.com · linkedin.com/in/ketanpansare</span>
+    <span>Sources: Alpaca docs “Registering Your App” and “Using OAuth2 and Trading API”; alpaca.markets/connect</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // ---------- tabs with hash routing ----------
+  var views = ["onboard", "market", "consent", "connected", "metrics"];
+  function show(name) {
+    if (views.indexOf(name) < 0) name = "onboard";
+    views.forEach(function (v) {
+      document.getElementById("v-" + v).hidden = v !== name;
+      document.getElementById("t-" + v).setAttribute("aria-selected", v === name ? "true" : "false");
+    });
+  }
+  document.querySelectorAll(".tab").forEach(function (t) {
+    t.addEventListener("click", function () { location.hash = t.dataset.view; show(t.dataset.view); });
+  });
+  window.addEventListener("hashchange", function () { show(location.hash.slice(1)); });
+  show(location.hash.slice(1));
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  // ---------- 1. onboarding stepper ----------
+  var stepNames = ["Create app", "Paper sandbox", "Live review", "Listed"];
+  var step = 0;
+  var app = { name: "Breakout Labs", redirect: "https://breakoutlabs.example/callback", scopes: { trading: true, "account:write": false, data: true } };
+  var checklist = { paper: false, disclosure: false, privacy: false, support: false };
+
+  function renderSteps() {
+    document.getElementById("steps").innerHTML = stepNames.map(function (n, i) {
+      var cls = i < step ? "done" : i === step ? "on" : "";
+      return '<span class="step ' + cls + '"><span class="dot">' + (i < step ? "✓" : i + 1) + "</span>" + n + "</span>";
+    }).join("");
+  }
+  function scopePills(sc) {
+    var out = ['<span class="pill p-read">Read account</span>'];
+    if (sc.trading) out.push('<span class="pill p-trade">Place orders</span>');
+    if (sc["account:write"]) out.push('<span class="pill p-write">Edit settings</span>');
+    if (sc.data) out.push('<span class="pill p-data">Market data</span>');
+    return out.join(" ");
+  }
+  function renderStep() {
+    renderSteps();
+    var b = document.getElementById("stepBody");
+    var next = document.getElementById("stepNext");
+    var back = document.getElementById("stepBack");
+    back.disabled = step === 0;
+    next.disabled = false;
+    if (step === 0) {
+      next.textContent = "Create app";
+      b.innerHTML =
+        '<div class="field"><label for="appName">App name</label><input id="appName" value="' + esc(app.name) + '"></div>' +
+        '<div class="field"><label for="appRedirect">Redirect URI</label><input id="appRedirect" value="' + esc(app.redirect) + '"></div>' +
+        '<div class="field"><span class="label">Access your app will request</span>' +
+        '<label class="check" for="scTrading"><input type="checkbox" id="scTrading"' + (app.scopes.trading ? " checked" : "") + '><span><b>Place orders</b> <span class="mono">trading</span><br><span class="muted">Needed for automated strategies.</span></span></label>' +
+        '<label class="check" for="scWrite"><input type="checkbox" id="scWrite"' + (app.scopes["account:write"] ? " checked" : "") + '><span><b>Edit settings and watchlists</b> <span class="mono">account:write</span></span></label>' +
+        '<label class="check" for="scData"><input type="checkbox" id="scData"' + (app.scopes.data ? " checked" : "") + '><span><b>Market data</b> <span class="mono">data</span><br><span class="muted">Uses the trader’s one data stream.</span></span></label></div>';
+      ["appName", "appRedirect"].forEach(function (id) {
+        document.getElementById(id).addEventListener("input", function (e) { if (id === "appName") app.name = e.target.value || "Untitled app"; else app.redirect = e.target.value; });
+      });
+      [["scTrading", "trading"], ["scWrite", "account:write"], ["scData", "data"]].forEach(function (p) {
+        document.getElementById(p[0]).addEventListener("change", function (e) { app.scopes[p[1]] = e.target.checked; });
+      });
+    } else if (step === 1) {
+      next.textContent = "Submit for live review";
+      b.innerHTML =
+        '<div class="success">Paper sandbox is ready. You can build and test now; no review needed for paper.</div>' +
+        '<div class="keybox"><span class="label">Credentials · paper</span><span>client_id&nbsp;&nbsp;&nbsp;&nbsp;cl_paper_7f3a…e21</span><span>client_secret ••••••••••••••••  <span class="muted">(shown once, store it safely)</span></span></div>' +
+        '<div class="field"><span class="label">Your app requests</span><div class="row">' + scopePills(app.scopes) + '</div></div>' +
+        '<label class="check" for="ckPaper"><input type="checkbox" id="ckPaper"' + (checklist.paper ? " checked" : "") + '><span>Completed a paper OAuth flow and placed a test order</span></label>';
+      document.getElementById("ckPaper").addEventListener("change", function (e) { checklist.paper = e.target.checked; renderNext(); });
+      renderNext();
+    } else if (step === 2) {
+      next.textContent = "Simulate approval";
+      b.innerHTML =
+        '<span class="label">Live review checklist</span>' +
+        '<label class="check" for="ckDisc"><input type="checkbox" id="ckDisc"' + (checklist.disclosure ? " checked" : "") + '><span>Monetization disclosed (ads, subscriptions or in-app purchases)</span></label>' +
+        '<label class="check" for="ckPriv"><input type="checkbox" id="ckPriv"' + (checklist.privacy ? " checked" : "") + '><span>Privacy policy and terms linked</span></label>' +
+        '<label class="check" for="ckSup"><input type="checkbox" id="ckSup"' + (checklist.support ? " checked" : "") + '><span>Support contact for traders</span></label>' +
+        '<span class="label">Review status</span>' +
+        '<ol class="timeline">' +
+        '<li><span class="tl-dot done"></span><span>Submitted for live access</span><span class="tl-when">Day 0</span></li>' +
+        '<li><span class="tl-dot now"></span><span><b>Compliance review</b><br><span class="muted">Owner: Partner Compliance · proposed target 5 business days</span></span><span class="tl-when">In progress</span></li>' +
+        '<li><span class="tl-dot"></span><span>Live access granted</span><span class="tl-when">Next</span></li>' +
+        '<li><span class="tl-dot"></span><span>Marketplace listing published</span><span class="tl-when">Next</span></li></ol>';
+      [["ckDisc", "disclosure"], ["ckPriv", "privacy"], ["ckSup", "support"]].forEach(function (p) {
+        document.getElementById(p[0]).addEventListener("change", function (e) { checklist[p[1]] = e.target.checked; renderNext(); });
+      });
+      renderNext();
+    } else {
+      next.textContent = "Start over";
+      b.innerHTML =
+        '<div class="success">Approved for live. Your listing is published.</div>' +
+        '<span class="label">Listing preview</span>' + appCard({ name: app.name, cat: "Automation", desc: "Rule-based strategies you can test on paper before going live.", scopes: app.scopes, paper: true, color: "#0D6B5B" }, false);
+    }
+  }
+  function renderNext() {
+    var next = document.getElementById("stepNext");
+    if (step === 1) next.disabled = !checklist.paper;
+    if (step === 2) next.disabled = !(checklist.disclosure && checklist.privacy && checklist.support);
+  }
+  document.getElementById("stepNext").addEventListener("click", function () {
+    if (step === 3) { step = 0; checklist = { paper: false, disclosure: false, privacy: false, support: false }; }
+    else step += 1;
+    renderStep();
+  });
+  document.getElementById("stepBack").addEventListener("click", function () { if (step > 0) { step -= 1; renderStep(); } });
+
+  // ---------- 2. marketplace ----------
+  var apps = [
+    { name: "Breakout Labs", cat: "Automation", desc: "Build rule-based strategies without code and run them on schedule.", scopes: { trading: true, data: true }, paper: true, color: "#0D6B5B" },
+    { name: "Candle Desk", cat: "Charting", desc: "Multi-chart layouts with your positions drawn on the chart.", scopes: { data: true }, paper: true, color: "#2F5D9A" },
+    { name: "Ledgerline", cat: "Analytics", desc: "Performance, fees and tax-lot reports across your accounts.", scopes: {}, paper: true, color: "#6B4FA0" },
+    { name: "Amana Screen", cat: "Values-based", desc: "Screens holdings for Shariah compliance and flags changes.", scopes: {}, paper: false, color: "#8A5A12" },
+    { name: "SignalPost", cat: "Automation", desc: "Turn chart alerts into orders with sizing rules you set.", scopes: { trading: true }, paper: true, color: "#B0281D" },
+    { name: "Rebalancer", cat: "Automation", desc: "Keeps a target portfolio in balance on a schedule you choose.", scopes: { trading: true, "account:write": true }, paper: false, color: "#3E6B2F" },
+    { name: "Quant Notebook", cat: "Analytics", desc: "Backtest ideas in notebooks, then paper trade them in one click.", scopes: { trading: true, data: true }, paper: true, color: "#1F6E8C" },
+    { name: "Tape Reader", cat: "Charting", desc: "Time and sales with volume profile for active traders.", scopes: { data: true }, paper: false, color: "#5A5F2A" }
+  ];
+  var cats = ["All", "Automation", "Charting", "Analytics", "Values-based"];
+  var curCat = "All";
+  function isReadOnly(a) { return !a.scopes.trading && !a.scopes["account:write"]; }
+  function appCard(a, withAction) {
+    var pills = scopePills(a.scopes);
+    var env = a.paper ? '<span class="pill p-good">✓ Works with paper</span>' : '<span class="pill p-plain">Live only</span>';
+    return '<article class="app"><div class="app-top"><span class="mark" style="background:' + a.color + '">' + esc(a.name.charAt(0)) + "</span><div><h3>" + esc(a.name) + '</h3><span class="cat">' + esc(a.cat) + " · Compliance reviewed</span></div></div>" +
+      "<p>" + esc(a.desc) + '</p><div class="pills">' + pills + '</div><div class="foot">' + env +
+      (withAction ? '<button class="btn ' + (a.paper ? "accent" : "ghost") + '" data-try="' + esc(a.name) + '">' + (a.paper ? "Try in paper" : "Connect") + "</button>" : "") + "</div></article>";
+  }
+  function renderCats() {
+    document.getElementById("cats").innerHTML = cats.map(function (c) {
+      return '<button class="chip" aria-pressed="' + (c === curCat) + '" data-cat="' + c + '">' + c + "</button>";
+    }).join("");
+    document.querySelectorAll("[data-cat]").forEach(function (b) { b.addEventListener("click", function () { curCat = b.dataset.cat; renderMarket(); }); });
+  }
+  function renderMarket() {
+    renderCats();
+    var paperOnly = document.getElementById("fPaper").checked;
+    var readOnly = document.getElementById("fRead").checked;
+    var list = apps.filter(function (a) {
+      return (curCat === "All" || a.cat === curCat) && (!paperOnly || a.paper) && (!readOnly || isReadOnly(a));
+    });
+    var el = document.getElementById("apps");
+    el.innerHTML = list.length ? list.map(function (a) { return appCard(a, true); }).join("") : '<div class="empty">No apps match these filters. Clear a filter to see more.</div>';
+    el.querySelectorAll("[data-try]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var a = apps.filter(function (x) { return x.name === b.dataset.try; })[0];
+        consentApp = a; consentEnv = a.paper ? "paper" : "live"; consentDone = false;
+        location.hash = "consent"; show("consent"); renderConsent();
+      });
+    });
+  }
+  document.getElementById("fPaper").addEventListener("change", renderMarket);
+  document.getElementById("fRead").addEventListener("change", renderMarket);
+
+  // ---------- 3. consent ----------
+  var consentApp = apps[0], consentEnv = "paper", consentDone = false;
+  var scopeCopy = {
+    read: { what: "See your balances, positions and orders", detail: "Always included. Read-only.", scope: "default", pill: '<span class="pill p-read">Low</span>' },
+    trading: { what: "Place, change and cancel orders", detail: "This app can trade for you on the account you choose below.", scope: "trading", pill: '<span class="pill p-trade">High</span>' },
+    "account:write": { what: "Edit account settings and watchlists", detail: "Changes your configuration, not your money.", scope: "account:write", pill: '<span class="pill p-write">Medium</span>' },
+    data: { what: "Use your market data stream", detail: "You have one stream. If another app is using it, that app will disconnect.", scope: "data", pill: '<span class="pill p-data">Note</span>' }
+  };
+  function renderConsent() {
+    var a = consentApp, p = document.getElementById("phone");
+    if (consentDone) {
+      p.innerHTML = '<div class="consent-head"><span class="mark" style="background:' + a.color + '">' + esc(a.name.charAt(0)) + '</span><div><h3>' + esc(a.name) + '</h3><span class="verified">Connected</span></div></div>' +
+        '<div class="success">Connected to your <b>' + consentEnv + '</b> account. You can revoke access anytime in Connected apps.</div>' +
+        '<button class="btn ghost" id="toConnected">Open Connected apps</button><button class="btn ghost" id="again">Replay consent</button>';
+      document.getElementById("toConnected").addEventListener("click", function () { location.hash = "connected"; show("connected"); });
+      document.getElementById("again").addEventListener("click", function () { consentDone = false; renderConsent(); });
+      return;
+    }
+    var rows = [scopeCopy.read];
+    ["trading", "account:write", "data"].forEach(function (k) { if (a.scopes[k]) rows.push(scopeCopy[k]); });
+    var stream = (a.scopes.data && streamOwner && streamOwner !== a.name) ? '<div class="notice">' + esc(streamOwner) + " is using your data stream now. Approving moves it to " + esc(a.name) + ".</div>" : "";
+    p.innerHTML =
+      '<div class="consent-head"><span class="mark" style="background:' + a.color + '">' + esc(a.name.charAt(0)) + '</span><div><h3>' + esc(a.name) + ' wants to connect</h3><span class="verified">✓ Reviewed by Alpaca Compliance (concept)</span></div></div>' +
+      '<span class="label">This app will be able to</span>' +
+      rows.map(function (r) { return '<div class="perm"><span class="what">' + r.what + "</span>" + r.pill + '<span class="detail">' + r.detail + ' <span class="scope">' + r.scope + "</span></span></div>"; }).join("") +
+      '<span class="label">Connect to</span>' +
+      '<div class="envs"><button class="env" aria-pressed="' + (consentEnv === "paper") + '" data-env="paper"' + (a.paper ? "" : " disabled") + '><b>Paper</b><span class="muted">' + (a.paper ? "Simulated money. Recommended first." : "Not offered by this app") + '</span></button>' +
+      '<button class="env" aria-pressed="' + (consentEnv === "live") + '" data-env="live"><b>Live</b><span class="muted">Real money.</span></button></div>' +
+      stream +
+      '<div class="row"><button class="btn accent" id="approve">Approve ' + consentEnv + '</button><button class="btn ghost" id="deny">Cancel</button></div>' +
+      '<span class="muted" style="font-size:12px">You can revoke access anytime. Concept mock: no sign-in, nothing is authorized.</span>';
+    p.querySelectorAll("[data-env]").forEach(function (b) { b.addEventListener("click", function () { consentEnv = b.dataset.env; renderConsent(); }); });
+    document.getElementById("approve").addEventListener("click", function () {
+      consentDone = true;
+      var existing = conns.filter(function (c) { return c.name === a.name; })[0];
+      if (!existing) conns.unshift({ name: a.name, color: a.color, env: consentEnv, scopes: a.scopes, last: "Just now" });
+      if (a.scopes.data) streamOwner = a.name;
+      renderConnected(); renderConsent();
+    });
+    document.getElementById("deny").addEventListener("click", function () { location.hash = "market"; show("market"); });
+  }
+
+  // ---------- 4. connected apps ----------
+  var conns = [
+    { name: "Candle Desk", color: "#2F5D9A", env: "live", scopes: { data: true }, last: "2 min ago" },
+    { name: "Ledgerline", color: "#6B4FA0", env: "live", scopes: {}, last: "Yesterday" },
+    { name: "Quant Notebook", color: "#1F6E8C", env: "paper", scopes: { trading: true, data: true }, last: "3 days ago" }
+  ];
+  var streamOwner = "Candle Desk", confirming = null;
+  function renderConnected() {
+    var el = document.getElementById("conn");
+    if (!conns.length) { el.innerHTML = '<div class="empty">No connected apps. Connect one from the Marketplace.</div>'; return; }
+    el.innerHTML = conns.map(function (c, i) {
+      var envPill = c.env === "paper" ? '<span class="pill p-good">Paper</span>' : '<span class="pill p-plain">Live</span>';
+      var holds = c.scopes.data ? (streamOwner === c.name ? '<span class="stream">Using your data stream</span>' : '<button class="btn ghost" data-stream="' + i + '" style="padding:4px 10px;font-size:12.5px">Use stream here</button>') : "";
+      var conf = confirming === i ? '<div class="confirm">Remove ' + esc(c.name) + "’s access to your " + c.env + ' account? <button class="btn" data-yes="' + i + '" style="padding:4px 10px;font-size:12.5px">Revoke</button><button class="btn ghost" data-no="1" style="padding:4px 10px;font-size:12.5px">Keep</button></div>' : "";
+      return '<div class="conn-row"><span class="mark" style="background:' + c.color + '">' + esc(c.name.charAt(0)) + '</span><div style="min-width:0"><div class="row" style="gap:6px"><b>' + esc(c.name) + "</b>" + envPill + "</div>" +
+        '<div class="row" style="gap:5px;margin-top:4px">' + scopePills(c.scopes) + '</div><div class="meta">Last activity ' + c.last + "</div>" + (holds ? '<div style="margin-top:6px">' + holds + "</div>" : "") +
+        '</div><button class="btn ghost" data-revoke="' + i + '" style="padding:6px 12px;font-size:13px">Revoke</button>' + conf + "</div>";
+    }).join("");
+    el.querySelectorAll("[data-revoke]").forEach(function (b) { b.addEventListener("click", function () { confirming = +b.dataset.revoke; renderConnected(); }); });
+    el.querySelectorAll("[data-yes]").forEach(function (b) { b.addEventListener("click", function () { var c = conns[+b.dataset.yes]; if (streamOwner === c.name) streamOwner = null; conns.splice(+b.dataset.yes, 1); confirming = null; renderConnected(); }); });
+    el.querySelectorAll("[data-no]").forEach(function (b) { b.addEventListener("click", function () { confirming = null; renderConnected(); }); });
+    el.querySelectorAll("[data-stream]").forEach(function (b) { b.addEventListener("click", function () { streamOwner = conns[+b.dataset.stream].name; renderConnected(); }); });
+  }
+
+  renderStep(); renderMarket(); renderConsent(); renderConnected();
+})();
+</script>
+
+</body>
+</html>
